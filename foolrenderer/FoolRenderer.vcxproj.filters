@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\rmath">
+      <UniqueIdentifier>{9beeddbd-e107-421c-a5d4-c13afe283ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\graphics">
+      <UniqueIdentifier>{82d41567-484d-4544-a3e3-f62d5b054539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\utility">
+      <UniqueIdentifier>{5c2f3843-ddb0-4299-8e9b-745f9603ef15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\utility">
+      <UniqueIdentifier>{5218f84b-8c90-473d-9129-0aa5082fbe42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\graphics">
+      <UniqueIdentifier>{a2ab373c-14d3-4858-9c6b-c515bd8e2393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\rmath">
+      <UniqueIdentifier>{f066eb25-2fc2-4a7f-b134-1e902006a6c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\shaders">
+      <UniqueIdentifier>{56b3b7bf-3a76-4cde-99cf-2bad0602b7e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\shaders">
+      <UniqueIdentifier>{5d926b90-4d0d-4da1-961e-a731793ada90}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\tgafunc.c">
+      <Filter>源文件\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\rasterizer.cpp">
+      <Filter>源文件\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\fast_obj.cpp">
+      <Filter>源文件\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\mesh.cpp">
+      <Filter>源文件\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\texture.cpp">
+      <Filter>源文件\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rmath\rvector.cpp">
+      <Filter>源文件\rmath</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\framebuffer.cpp">
+      <Filter>源文件\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shaders\basic.cpp">
+      <Filter>源文件\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shaders\standard.cpp">
+      <Filter>源文件\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shaders\shadow_casting.cpp">
+      <Filter>源文件\shaders</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\rmath\rvector.h">
+      <Filter>头文件\rmath</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rmath\base_util.h">
+      <Filter>头文件\rmath</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rmath\rmatrix.h">
+      <Filter>头文件\rmath</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\color.h">
+      <Filter>头文件\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\texture.h">
+      <Filter>头文件\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\framebuffer.h">
+      <Filter>头文件\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\shader_context.h">
+      <Filter>头文件\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\rasterizer.h">
+      <Filter>头文件\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\image.h">
+      <Filter>头文件\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\tgafunc.h">
+      <Filter>头文件\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\mesh.h">
+      <Filter>头文件\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\fast_obj.h">
+      <Filter>头文件\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shaders\basic.h">
+      <Filter>头文件\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shaders\standard.h">
+      <Filter>头文件\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shaders\shadow_casting.h">
+      <Filter>头文件\shaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

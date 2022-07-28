@@ -2,6 +2,16 @@
 
 ![teaser image](docs/teaser.gif)
 
+## About this repo
+
+This is a C++17 version port of the C99 software renderer project **foolrenderer**. The idea is to take full advantage of the conveniences C++ offers, such as RAII, OOP style struct accessing, much more flexible api (based on templates and containers).
+
+The work is still a WIP (in terms of completely rewrite the code to C++ style), but it can already compile and render correctly.
+
+I'm working on Windows with VS2022, so currently I'm only providing you with the .SLN solution, CMAKE version will come soon.
+
+## About foolrenderer
+
 **foolrenderer** is a tiny software renderer implemented from scratch without
 the use of graphics API, used to understand how GPUs work. The primary goal for
 foolrenderer is to demonstrate some real-time rendering techniques for video
