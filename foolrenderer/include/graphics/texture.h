@@ -4,7 +4,8 @@
 #include "color.h"
 #include "rmath/rvector.h"
 
-enum class texture_format : uint8_t {
+enum class texture_format : uint8_t
+{
     ///
     /// The format has only an R component, the type is 8-bit unsigned integer.
     ///
@@ -60,32 +61,32 @@ struct Texture
 
     ~Texture() = default;
 
-    Texture(const Texture& other);
+    Texture(const Texture &other);
 
-    Texture(Texture&& other) noexcept;
+    Texture(Texture &&other) noexcept;
 
-    Texture& operator=(Texture&& other) noexcept;
+    Texture &operator=(Texture &&other) noexcept;
 
-    Texture& operator=(const Texture& other);
+    Texture &operator=(const Texture &other);
 
     /*
         Move given vector data to texture pixels
     */
-    void set_texture_pixels(std::vector<uint8_t>&& pixels);
-    
+    void set_texture_pixels(std::vector<uint8_t> &&pixels);
+
     /*
         Copy given raw array to texture pixels
         Be careful that the size of the array should be pixel_size * width * height
     */
-    bool set_texture_pixels(void* pixels);
+    bool set_texture_pixels(void *pixels);
 
-    /* 
+    /*
         Returns the raw pointer of the pixels (as bytes array)
         Do not free/delete this pointer
     */
-    uint8_t* get_pixels();
+    uint8_t *get_pixels();
 
-    const uint8_t* get_pixels() const;
+    const uint8_t *get_pixels() const;
 
     /*
         \brief Samples pixel from the texture.

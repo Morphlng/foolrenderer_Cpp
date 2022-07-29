@@ -1,3 +1,3 @@
 #define FAST_OBJ_IMPLEMENTATION
 
-#include "fast_obj.h"
+#include "utility/fast_obj.h"

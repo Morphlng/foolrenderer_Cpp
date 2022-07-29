@@ -1,5 +1,5 @@
-#include <memory>
 #include <string>
+#include <memory>
 
 #include "graphics/framebuffer.h"
 #include "graphics/rasterizer.h"
@@ -16,7 +16,8 @@
 #define IMAGE_WIDTH 1024
 #define IMAGE_HEIGHT 1024
 
-struct Model {
+struct Model
+{
     std::unique_ptr<Mesh> mesh;
     std::unique_ptr<Texture> base_color_map;
     std::unique_ptr<Texture> normal_map;
@@ -29,35 +30,28 @@ static vec3 camera_position{-2.0f, 4.5f, 2.0f};
 static vec3 camera_target{0.0f, 0.4f, 0.0f};
 
 static FrameBuffer shadow_framebuffer;
-static Texture *shadow_map{
-    nullptr};  // this is only a pointer, does not have ownership
+static Texture *shadow_map{nullptr}; // this is only a pointer, does not have ownership
 static FrameBuffer framebuffer;
 static Texture *color_buffer{nullptr};
 static Texture *depth_buffer{nullptr};
 
 static matrix4x4 light_world2clip;
 
-static void initialize_rendering() {
-    shadow_framebuffer.attach_texture(
-        attachment_type::DEPTH_ATTACHMENT,
-        std::make_unique<Texture>(texture_format::TEXTURE_FORMAT_DEPTH_FLOAT,
-                                  SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT));
+static void initialize_rendering()
+{
+    shadow_framebuffer.attach_texture(attachment_type::DEPTH_ATTACHMENT, std::make_unique<Texture>(texture_format::TEXTURE_FORMAT_DEPTH_FLOAT, SHADOW_MAP_WIDTH,
+                                                                                                   SHADOW_MAP_HEIGHT));
     shadow_map = shadow_framebuffer.depth_buffer.get();
 
-    framebuffer.attach_texture(
-        attachment_type::COLOR_ATTACHMENT,
-        std::make_unique<Texture>(texture_format::TEXTURE_FORMAT_SRGB8_A8,
-                                  IMAGE_WIDTH, IMAGE_HEIGHT));
-    framebuffer.attach_texture(
-        attachment_type::DEPTH_ATTACHMENT,
-        std::make_unique<Texture>(texture_format::TEXTURE_FORMAT_DEPTH_FLOAT,
-                                  IMAGE_WIDTH, IMAGE_HEIGHT));
+    framebuffer.attach_texture(attachment_type::COLOR_ATTACHMENT, std::make_unique<Texture>(texture_format::TEXTURE_FORMAT_SRGB8_A8, IMAGE_WIDTH, IMAGE_HEIGHT));
+    framebuffer.attach_texture(attachment_type::DEPTH_ATTACHMENT, std::make_unique<Texture>(texture_format::TEXTURE_FORMAT_DEPTH_FLOAT, IMAGE_WIDTH, IMAGE_HEIGHT));
 
     color_buffer = framebuffer.color_buffer.get();
     depth_buffer = framebuffer.depth_buffer.get();
 }
 
-static void render_shadow_map(const Model *model) {
+static void render_shadow_map(const Model *model)
+{
     set_viewport(0, 0, SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
     set_vertex_shader(shadow_casting_vertex_shader);
     set_fragment_shader(shadow_casting_fragment_shader);
@@ -65,8 +59,7 @@ static void render_shadow_map(const Model *model) {
 
     shadow_casting_uniform uniform;
     vec3 light_position = light_direction.normalize() * 5.0f;
-    matrix4x4 world2view =
-        matrix_t::look_at(light_position, VEC3_ZERO, vec3{0.0f, 1.0f, 0.0f});
+    matrix4x4 world2view = matrix_t::look_at(light_position, VEC3_ZERO, vec3{0.0f, 1.0f, 0.0f});
     matrix4x4 view2clip = matrix_t::orthographic(1.5f, 1.5f, 0.1f, 6.0f);
     light_world2clip = view2clip * world2view;
     // No rotation, scaling, or translation of the model, so the local2clip
@@ -75,10 +68,12 @@ static void render_shadow_map(const Model *model) {
 
     const Mesh *mesh = model->mesh.get();
     uint32_t triangle_count = mesh->triangle_count;
-    for (size_t t = 0; t < triangle_count; t++) {
+    for (size_t t = 0; t < triangle_count; t++)
+    {
         shadow_casting_vertex_attribute attributes[3];
         const void *attribute_ptrs[3];
-        for (uint32_t v = 0; v < 3; v++) {
+        for (uint32_t v = 0; v < 3; v++)
+        {
             attributes[v].position = mesh->get_mesh_position(t, v);
             attribute_ptrs[v] = attributes + v;
         }
@@ -86,7 +81,8 @@ static void render_shadow_map(const Model *model) {
     }
 }
 
-static void render_model(const Model *model) {
+static void render_model(const Model *model)
+{
     set_viewport(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
     set_vertex_shader(standard_vertex_shader);
     set_fragment_shader(standard_fragment_shader);
@@ -95,8 +91,7 @@ static void render_model(const Model *model) {
 
     standard_uniform uniform;
     uniform.local2world = MATRIX4x4_IDENTITY;
-    matrix4x4 world2view = matrix_t::look_at(camera_position, camera_target,
-                                             vec3{0.0f, 1.0f, 0.0f});
+    matrix4x4 world2view = matrix_t::look_at(camera_position, camera_target, vec3{0.0f, 1.0f, 0.0f});
     matrix4x4 view2clip = matrix_t::orthographic(2.0f, 2.0f, 0.1f, 10.0f);
     uniform.world2clip = view2clip * world2view;
     uniform.local2world_direction = uniform.local2world.to_3x3();
@@ -122,14 +117,16 @@ static void render_model(const Model *model) {
     uniform.metallic_map = model->metallic_map.get();
     uniform.roughness = 1.0f;
     uniform.roughness_map = model->roughness_map.get();
-    uniform.reflectance = 0.5f;  // Common dielectric surfaces F0.
+    uniform.reflectance = 0.5f; // Common dielectric surfaces F0.
 
     const Mesh *mesh = model->mesh.get();
     uint32_t triangle_count = mesh->triangle_count;
-    for (size_t t = 0; t < triangle_count; t++) {
+    for (size_t t = 0; t < triangle_count; t++)
+    {
         standard_vertex_attribute attributes[3];
         const void *attribute_ptrs[3];
-        for (uint32_t v = 0; v < 3; v++) {
+        for (uint32_t v = 0; v < 3; v++)
+        {
             attributes[v].position = mesh->get_mesh_position(t, v);
             attributes[v].normal = mesh->get_mesh_normal(t, v);
             attributes[v].tangent = mesh->get_mesh_tangent(t, v);
@@ -140,8 +137,9 @@ static void render_model(const Model *model) {
     }
 }
 
-int main() {
-    auto base_path = std::string("..\\assets\\cut_fish\\");
+int main()
+{
+    auto base_path = std::string("D:\\Download\\foolrenderer-main\\assets\\cut_fish\\");
     auto model_path = base_path + "cut_fish.obj";
     auto base_color_map_path = base_path + "base_color.tga";
     auto normal_map_path = base_path + "normal.tga";
@@ -157,8 +155,37 @@ int main() {
 
     initialize_rendering();
     render_shadow_map(&model);
-    render_model(&model);
-    save_image(color_buffer, "output.tga", false);
+
+    std::string frame_path = "D:/Records/Render/";
+    int i = 0;
+    for (i; i < 40; i++)
+    {
+        camera_position.z += 0.1f;
+
+        render_model(&model);
+        save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
+    }
+    std::cout << "z flip done\n";
+
+    for (i; i < 80; i++)
+    {
+        camera_position.z -= 0.1f;
+        camera_position.x -= 0.1f;
+
+        render_model(&model);
+        save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
+    }
+    std::cout << "x flip done\n";
+
+    for (i; i < 120; i++)
+    {
+        camera_position.x += 0.1f;
+        camera_position.y += 0.1f;
+
+        render_model(&model);
+        save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
+    }
+    std::cout << "y flip done\n";
 
     return 0;
 }

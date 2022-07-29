@@ -3,7 +3,7 @@
 #include "framebuffer.h"
 #include "shader_context.h"
 #include "texture.h"
-#include "rvector.h"
+#include "rmath/rvector.h"
 
 ///
 /// \brief Pointer to vertex shader.
@@ -13,7 +13,7 @@
 /// and material properties to the shader.
 ///
 /// The vertex attribute represents the data elements of a vertex that the
-/// vertex shader needs to process£¬such as vertex positions, normal and texture
+/// vertex shader needs to processï¿½ï¿½such as vertex positions, normal and texture
 /// coordinates.
 ///
 /// The vertex shader returns the clip space position of the vertex, the clip
@@ -25,7 +25,7 @@
 /// triangles, and the value of each pixel will be passed as input to the
 /// fragment shader.
 ///
-using vertex_shader = vec4(*)(ShaderContext* output, const void* uniform, const void* vertex_attribute);
+using vertex_shader = vec4 (*)(ShaderContext *output, const void *uniform, const void *vertex_attribute);
 
 ///
 /// \brief Pointer to fragment shader.
@@ -39,7 +39,7 @@ using vertex_shader = vec4(*)(ShaderContext* output, const void* uniform, const 
 ///
 /// The fragment shader returns the color value.
 ///
-using fragment_shader = vec4(*)(ShaderContext* input, const void* uniform);
+using fragment_shader = vec4 (*)(ShaderContext *input, const void *uniform);
 
 ///
 /// \brief Set the viewport parameters.
@@ -81,5 +81,5 @@ void set_fragment_shader(fragment_shader shader);
 /// \param vertex_attributes An array containing vertex attributes, with a
 ///                          length of 3.
 ///
-void draw_triangle(FrameBuffer* framebuffer, const void* uniform,
-    const void* const vertex_attributes[]);
+void draw_triangle(FrameBuffer *framebuffer, const void *uniform,
+                   const void *const vertex_attributes[]);

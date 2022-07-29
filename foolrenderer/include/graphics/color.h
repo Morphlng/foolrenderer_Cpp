@@ -16,7 +16,8 @@ inline float uint8_to_float(uint8_t value) { return value / 255.0f; }
 /// \param value The R, G or B component of a linear color.
 /// \return Returns the converted value.
 ///
-inline float convert_to_srgb_color(float value) {
+inline float convert_to_srgb_color(float value)
+{
     // This is just an approximate conversion method. A discussion of nonlinear
     // color space can be found in NVIDIA's GPU Gems 3:
     // https://developer.nvidia.com/gpugems/gpugems3/part-iv-image-effects/chapter-24-importance-being-linear
@@ -29,7 +30,8 @@ inline float convert_to_srgb_color(float value) {
 /// \param vlaue The R, G or B component of a sRGB color.
 /// \return Returns the converted value.
 ///
-inline float convert_to_linear_color(float vlaue) {
+inline float convert_to_linear_color(float vlaue)
+{
     // Similar to the convert_to_srgb_color() function, this is just an
     // approximate conversion.
     return powf(vlaue, GAMMA);

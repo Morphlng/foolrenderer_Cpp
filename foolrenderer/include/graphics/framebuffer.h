@@ -4,7 +4,11 @@
 #include <memory>
 #include "texture.h"
 
-enum class attachment_type : uint8_t { COLOR_ATTACHMENT, DEPTH_ATTACHMENT };
+enum class attachment_type : uint8_t
+{
+    COLOR_ATTACHMENT,
+    DEPTH_ATTACHMENT
+};
 
 /*
     \brief A framebuffer is a collection of buffers that can be used as the
@@ -23,11 +27,11 @@ struct FrameBuffer
 
     // attach a raw Texture* to FrameBuffer
     // The unique_ptr will take over the ownership
-    bool attach_texture(attachment_type attachment, Texture* texture);
+    bool attach_texture(attachment_type attachment, Texture *texture);
 
     // attach a std::unique_ptr<Texture> to FrameBuffer
     // The unique_ptr will take over the ownership
-    bool attach_texture(attachment_type attachment, std::unique_ptr<Texture>&& texture);
+    bool attach_texture(attachment_type attachment, std::unique_ptr<Texture> &&texture);
 
     /*
         \brief Sets clear values for the color buffers.
@@ -47,7 +51,7 @@ struct FrameBuffer
             set via the set_clear_color() function. For depth buffers, a fixed value of
             1 will be used to clear each pixel. If framebuffer is a null pointer, the
             function does nothing.
-        
+
         \param framebuffer Pointer to the framebuffer to clear.
     */
     void clear();

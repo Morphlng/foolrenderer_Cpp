@@ -1,17 +1,21 @@
-#include "mesh.h"
+#include "utility/mesh.h"
+#include <cstring> // for memcpy
 
 #define VERTEX_EQUAL(a, b) \
     ((a)->p == (b)->p && (a)->t == (b)->t && (a)->n == (b)->n)
 
 // Put vertex at the end of vertex_set and return its index in vertex_set, If
 // the vertex has been put into vertex_set, the index is returned directly.
-static uint32_t put_vertex(fastObjIndex vertex_set[], uint32_t& vertex_set_size,
-    const fastObjIndex* vertex) {
+static uint32_t put_vertex(fastObjIndex vertex_set[], uint32_t &vertex_set_size,
+                           const fastObjIndex *vertex)
+{
     // The current solution is stupid but simple to implement...
     // This function can be optimized using a hash map.
-    for (uint32_t i = 0; i < vertex_set_size; i++) {
-        fastObjIndex* v = vertex_set + i;
-        if (VERTEX_EQUAL(v, vertex)) {
+    for (uint32_t i = 0; i < vertex_set_size; i++)
+    {
+        fastObjIndex *v = vertex_set + i;
+        if (VERTEX_EQUAL(v, vertex))
+        {
             return i;
         }
     }
@@ -28,25 +32,33 @@ Mesh::Mesh(std::string_view filename)
 void Mesh::load_model(std::string_view filename)
 {
     // use std::unique_ptr for exception safe deletion
-    auto fastObjDeleter = [](fastObjMesh* data) { if (data)fast_obj_destroy(data); };
+    auto fastObjDeleter = [](fastObjMesh *data)
+    { if (data)fast_obj_destroy(data); };
     std::unique_ptr<fastObjMesh, decltype(fastObjDeleter)> data(fast_obj_read(filename.data()), fastObjDeleter);
 
-    do {
-        if (!data) {
+    do
+    {
+        if (!data)
+        {
             break;
         }
-        if (!set_vertex_attributes(data.get())) {
+        if (!set_vertex_attributes(data.get()))
+        {
             break;
         }
-        if (!set_diffuse_texture_name(data.get())) {
+        if (!set_diffuse_texture_name(data.get()))
+        {
             break;
         }
-        if (!normals) {
-            if (!compute_normals()) {
+        if (!normals)
+        {
+            if (!compute_normals())
+            {
                 break;
             }
         }
-        if (!compute_tangents()) {
+        if (!compute_tangents())
+        {
             break;
         }
 
@@ -71,10 +83,12 @@ void Mesh::clean_up()
 
 vec3 Mesh::get_mesh_position(uint32_t triangle_index, uint32_t vertex_index) const
 {
-    if (triangle_index >= triangle_count || vertex_index > 2) {
+    if (triangle_index >= triangle_count || vertex_index > 2)
+    {
         return VEC3_ZERO;
     }
-    else {
+    else
+    {
         uint32_t index = indices[triangle_index * 3 + vertex_index];
         return positions[index];
     }
@@ -82,10 +96,12 @@ vec3 Mesh::get_mesh_position(uint32_t triangle_index, uint32_t vertex_index) con
 
 vec2 Mesh::get_mesh_texcoord(uint32_t triangle_index, uint32_t vertex_index) const
 {
-    if (triangle_index >= triangle_count || vertex_index > 2 || !texcoords) {
+    if (triangle_index >= triangle_count || vertex_index > 2 || !texcoords)
+    {
         return VEC2_ZERO;
     }
-    else {
+    else
+    {
         uint32_t index = indices[triangle_index * 3 + vertex_index];
         return texcoords[index];
     }
@@ -93,10 +109,12 @@ vec2 Mesh::get_mesh_texcoord(uint32_t triangle_index, uint32_t vertex_index) con
 
 vec3 Mesh::get_mesh_normal(uint32_t triangle_index, uint32_t vertex_index) const
 {
-    if (triangle_index >= triangle_count || vertex_index > 2 || !normals) {
+    if (triangle_index >= triangle_count || vertex_index > 2 || !normals)
+    {
         return VEC3_ZERO;
     }
-    else {
+    else
+    {
         uint32_t index = indices[triangle_index * 3 + vertex_index];
         return normals[index];
     }
@@ -104,21 +122,25 @@ vec3 Mesh::get_mesh_normal(uint32_t triangle_index, uint32_t vertex_index) const
 
 vec4 Mesh::get_mesh_tangent(uint32_t triangle_index, uint32_t vertex_index) const
 {
-    if (triangle_index >= triangle_count || vertex_index > 2 || !tangents) {
+    if (triangle_index >= triangle_count || vertex_index > 2 || !tangents)
+    {
         return VEC4_ZERO;
     }
-    else {
+    else
+    {
         uint32_t index = indices[triangle_index * 3 + vertex_index];
         return tangents[index];
     }
 }
 
-bool Mesh::set_vertex_attributes(const fastObjMesh* data)
+bool Mesh::set_vertex_attributes(const fastObjMesh *data)
 {
     uint32_t index_count = 0;
-    for (unsigned int f = 0; f < data->face_count; f++) {
+    for (unsigned int f = 0; f < data->face_count; f++)
+    {
         unsigned int face_vertices = data->face_vertices[f];
-        if (face_vertices != 0 && face_vertices != 3) {
+        if (face_vertices != 0 && face_vertices != 3)
+        {
             // Failed to load mesh if mesh contains non-triangular faces. Faces
             // with 0 vertices can be ignored directly.
             return false;
@@ -127,7 +149,8 @@ bool Mesh::set_vertex_attributes(const fastObjMesh* data)
     }
 
     indices.reset(new uint32_t[index_count]);
-    if (!indices) {
+    if (!indices)
+    {
         return false;
     }
 
@@ -138,8 +161,9 @@ bool Mesh::set_vertex_attributes(const fastObjMesh* data)
     bool has_texcoords = false;
     bool has_normals = false;
 
-    for (uint32_t i = 0; i < index_count; i++) {
-        const fastObjIndex* vertex = data->indices + i;
+    for (uint32_t i = 0; i < index_count; i++)
+    {
+        const fastObjIndex *vertex = data->indices + i;
         uint32_t vertex_set_index =
             put_vertex(vertex_set.get(), vertex_set_size, vertex);
         indices[i] = vertex_set_index;
@@ -156,7 +180,8 @@ bool Mesh::set_vertex_attributes(const fastObjMesh* data)
     normals.reset(has_texcoords ? new vec3[vertex_set_size] : nullptr);
 
     if (!positions || (has_texcoords && !texcoords) ||
-        (has_normals && !normals)) {
+        (has_normals && !normals))
+    {
         indices.reset();
         positions.reset();
         texcoords.reset();
@@ -164,41 +189,50 @@ bool Mesh::set_vertex_attributes(const fastObjMesh* data)
         return false;
     }
 
-    for (uint32_t i = 0; i < vertex_set_size; i++) {
-        float* src;
-        fastObjIndex* vertex = vertex_set.get() + i;
+    for (uint32_t i = 0; i < vertex_set_size; i++)
+    {
+        float *src;
+        fastObjIndex *vertex = vertex_set.get() + i;
 
         // Set positions.
-        if (vertex->p < data->position_count) {
+        if (vertex->p < data->position_count)
+        {
             src = data->positions + vertex->p * 3;
         }
-        else {
+        else
+        {
             // index out of bounds, use dummy data at index 0.
             src = data->positions;
         }
         memcpy((positions.get() + i)->elements, data->positions + vertex->p * 3,
-            sizeof(float) * 3);
+               sizeof(float) * 3);
         // Set texcoords.
-        if (has_texcoords) {
-            if (vertex->t < data->texcoord_count) {
+        if (has_texcoords)
+        {
+            if (vertex->t < data->texcoord_count)
+            {
                 src = data->texcoords + vertex->t * 2;
             }
-            else {
+            else
+            {
                 src = data->texcoords;
             }
             memcpy((texcoords.get() + i)->elements, data->texcoords + vertex->t * 2,
-                sizeof(float) * 2);
+                   sizeof(float) * 2);
         }
         // Set normals.
-        if (has_normals) {
-            if (vertex->n < data->normal_count) {
+        if (has_normals)
+        {
+            if (vertex->n < data->normal_count)
+            {
                 src = data->normals + vertex->n * 3;
             }
-            else {
+            else
+            {
                 src = data->normals;
             }
             memcpy((normals.get() + i)->elements, data->normals + vertex->n * 3,
-                sizeof(float) * 3);
+                   sizeof(float) * 3);
             // Normal data in .obj files may not be normalized.
             normals[i] = normals[i].normalize();
         }
@@ -209,15 +243,17 @@ bool Mesh::set_vertex_attributes(const fastObjMesh* data)
     return true;
 }
 
-bool Mesh::set_diffuse_texture_name(const fastObjMesh* data)
+bool Mesh::set_diffuse_texture_name(const fastObjMesh *data)
 {
     diffuse_texture_path.clear();
-    if (data->material_count == 0) {
+    if (data->material_count == 0)
+    {
         return true;
     }
 
-    char* texture_path = data->materials->map_Kd.path;
-    if (texture_path == nullptr) {
+    char *texture_path = data->materials->map_Kd.path;
+    if (texture_path == nullptr)
+    {
         return true;
     }
 
@@ -231,23 +267,26 @@ bool Mesh::set_diffuse_texture_name(const fastObjMesh* data)
 bool Mesh::compute_normals()
 {
     normals.reset(new vec3[vertex_count]);
-    if (!normals) {
+    if (!normals)
+    {
         return false;
     }
 
-    for (uint32_t v = 0; v < vertex_count; v++) {
+    for (uint32_t v = 0; v < vertex_count; v++)
+    {
         normals[v] = VEC3_ZERO;
     }
 
-    for (uint32_t t = 0; t < triangle_count; t++) {
+    for (uint32_t t = 0; t < triangle_count; t++)
+    {
         // For calculating surface normals, refer to:
         // https://www.khronos.org/opengl/wiki/Calculating_a_Surface_Normal
         uint32_t index_0 = indices[t * 3];
         uint32_t index_1 = indices[t * 3 + 1];
         uint32_t index_2 = indices[t * 3 + 2];
-        const vec3& p0 = positions[index_0];
-        const vec3& p1 = positions[index_1];
-        const vec3& p2 = positions[index_2];
+        const vec3 &p0 = positions[index_0];
+        const vec3 &p1 = positions[index_1];
+        const vec3 &p2 = positions[index_2];
         vec3 u = p1 - p0;
         vec3 v = p2 - p0;
         // Vertices are stored in counterclockwise order by default in .obj
@@ -265,7 +304,8 @@ bool Mesh::compute_normals()
         normals[index_2] = normals[index_2] + n;
     }
     // Normalize the normals of all vertices to get the average result.
-    for (uint32_t v = 0; v < vertex_count; v++) {
+    for (uint32_t v = 0; v < vertex_count; v++)
+    {
         normals[v] = normals[v].normalize();
     }
 
@@ -274,13 +314,15 @@ bool Mesh::compute_normals()
 
 bool Mesh::compute_tangents()
 {
-    if (!normals || !texcoords) {
+    if (!normals || !texcoords)
+    {
         tangents.reset();
         return false;
     }
 
     tangents.reset(new vec4[vertex_count]);
-    if (!tangents) {
+    if (!tangents)
+    {
         return false;
     }
 
@@ -288,22 +330,24 @@ bool Mesh::compute_tangents()
     // vector.
     std::unique_ptr<vec3[]> tmp_tangents = std::make_unique<vec3[]>(vertex_count);
     std::unique_ptr<vec3[]> tmp_bitangents = std::make_unique<vec3[]>(vertex_count);
-    for (uint32_t v = 0; v < vertex_count; v++) {
+    for (uint32_t v = 0; v < vertex_count; v++)
+    {
         tmp_tangents[v] = VEC3_ZERO;
         tmp_bitangents[v] = VEC3_ZERO;
     }
-    // This function use Lengyel¡¯s method, for more details refer to:
+    // This function use Lengyelï¿½ï¿½s method, for more details refer to:
     // http://www.terathon.com/code/tangent.html
-    for (uint32_t t = 0; t < triangle_count; t++) {
+    for (uint32_t t = 0; t < triangle_count; t++)
+    {
         uint32_t index_0 = indices[t * 3];
         uint32_t index_1 = indices[t * 3 + 1];
         uint32_t index_2 = indices[t * 3 + 2];
-        const vec3& p0 = positions[index_0];
-        const vec3& p1 = positions[index_1];
-        const vec3& p2 = positions[index_2];
-        const vec2& w0 = texcoords[index_0];
-        const vec2& w1 = texcoords[index_1];
-        const vec2& w2 = texcoords[index_2];
+        const vec3 &p0 = positions[index_0];
+        const vec3 &p1 = positions[index_1];
+        const vec3 &p2 = positions[index_2];
+        const vec2 &w0 = texcoords[index_0];
+        const vec2 &w1 = texcoords[index_1];
+        const vec2 &w2 = texcoords[index_2];
 
         vec3 e1 = p1 - p0;
         vec3 e2 = p2 - p0;
@@ -314,11 +358,13 @@ bool Mesh::compute_tangents()
 
         float d = x1 * y2 - x2 * y1;
         vec3 tangent, bitangent;
-        if (d == 0.0f) {
+        if (d == 0.0f)
+        {
             tangent = VEC3_ZERO;
             bitangent = VEC3_ZERO;
         }
-        else {
+        else
+        {
             float r = 1.0f / d;
             tangent = e1 * y2 - e2 * y1;
             tangent = tangent * r;
@@ -333,15 +379,16 @@ bool Mesh::compute_tangents()
         tmp_bitangents[index_2] = tmp_bitangents[index_2] + bitangent;
     }
 
-    for (uint32_t v = 0; v < vertex_count; v++) {
-        vec3& t = tmp_tangents[v];
-        const vec3& b = tmp_bitangents[v];
-        const vec3& n = normals[v];
+    for (uint32_t v = 0; v < vertex_count; v++)
+    {
+        vec3 &t = tmp_tangents[v];
+        const vec3 &b = tmp_bitangents[v];
+        const vec3 &n = normals[v];
         // Gram-Schmidt orthogonalize.
         t = t - n * n.dot(t);
         t = t.normalize();
 
-        vec4& tangent = tangents[v];
+        vec4 &tangent = tangents[v];
         tangent.x = t.x;
         tangent.y = t.y;
         tangent.z = t.z;

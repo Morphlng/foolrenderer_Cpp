@@ -29,7 +29,7 @@
     <ClCompile Include="src\shaders\standard.cpp" />
     <ClCompile Include="src\utility\fast_obj.cpp" />
     <ClCompile Include="src\utility\mesh.cpp" />
-    <ClCompile Include="src\utility\tgafunc.c" />
+    <ClCompile Include="src\utility\tgafunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\graphics\color.h" />

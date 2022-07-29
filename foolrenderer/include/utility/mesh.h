@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rvector.h"
+#include "rmath/rvector.h"
 #include "fast_obj.h"
 #include <memory>
 #include <string>
@@ -27,7 +27,8 @@
 /// If the mesh has no diffuse texture associated with it, diffuse_texture_path
 /// points to a null pointer.
 ///
-struct Mesh {
+struct Mesh
+{
     std::unique_ptr<vec3[]> positions;
     std::unique_ptr<vec2[]> texcoords;
     ///
@@ -70,10 +71,10 @@ struct Mesh {
 
 private:
     // Returns false if failed, otherwise returns true.
-    bool set_vertex_attributes(const fastObjMesh* data);
+    bool set_vertex_attributes(const fastObjMesh *data);
 
     // Returns false if failed, otherwise returns true.
-    bool set_diffuse_texture_name(const fastObjMesh* data);
+    bool set_diffuse_texture_name(const fastObjMesh *data);
 
     // Calculates the average unit-length normal vector for each vertex in the mesh.
     //

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rvector.h"
+#include "rmath/rvector.h"
 #include <cstdint>
 
 #define MAX_FLOAT_VARIABLES 2
@@ -9,17 +9,18 @@
 #define MAX_VECTOR4_VARIABLES 2
 
 /*
-	\brief Structure used to pass data between shaders in different stages.
+    \brief Structure used to pass data between shaders in different stages.
 
-	The vertex shader stores floating-point-based data into this structure and
-	automatically interpolated on the surface of the triangle before the
-	fragment shader is executed. The interpolation result can be used in the
-	fragment shader.
+    The vertex shader stores floating-point-based data into this structure and
+    automatically interpolated on the surface of the triangle before the
+    fragment shader is executed. The interpolation result can be used in the
+    fragment shader.
 
-	IMPORTANT: Do not directly access the members of the structure in the
-	shader. Instead, use shader_context_*() functions.
+    IMPORTANT: Do not directly access the members of the structure in the
+    shader. Instead, use shader_context_*() functions.
 */
-struct ShaderContext {
+struct ShaderContext
+{
     // Array to store various types of variables.
     float float_variables[MAX_FLOAT_VARIABLES];
     vec2 vec2_variables[MAX_VECTOR2_VARIABLES];
@@ -49,20 +50,25 @@ struct ShaderContext {
             initialization function.
 
         It should not be and is not necessary to use this function in the shader.
-        
+
         \param context The shader context object.
     */
-    void clear() {
-        for (int8_t i = 0; i < MAX_FLOAT_VARIABLES; i++) {
+    void clear()
+    {
+        for (int8_t i = 0; i < MAX_FLOAT_VARIABLES; i++)
+        {
             float_allocations[i] = false;
         }
-        for (int8_t i = 0; i < MAX_VECTOR2_VARIABLES; i++) {
+        for (int8_t i = 0; i < MAX_VECTOR2_VARIABLES; i++)
+        {
             vec2_allocations[i] = false;
         }
-        for (int8_t i = 0; i < MAX_VECTOR3_VARIABLES; i++) {
+        for (int8_t i = 0; i < MAX_VECTOR3_VARIABLES; i++)
+        {
             vec3_allocations[i] = false;
         }
-        for (int8_t i = 0; i < MAX_VECTOR4_VARIABLES; i++) {
+        for (int8_t i = 0; i < MAX_VECTOR4_VARIABLES; i++)
+        {
             vec4_allocations[i] = false;
         }
         float_variable_count = 0;
@@ -71,28 +77,30 @@ struct ShaderContext {
         vec4_variable_count = 0;
     }
 
-#define RETURN_VARIABLE(type, max_variables)                      \
-    do {                                                          \
-        if (index >= max_variables) {                             \
-            return nullptr;                                       \
-        }                                                         \
-        type *variables = type##_variables;                       \
-        bool *allocations = type##_allocations;                   \
-        int8_t *index_queue = type##_index_queue;                 \
-        int8_t *variable_count = &type##_variable_count;          \
-        if (!allocations[index]) {                                \
-            allocations[index] = true;                            \
-            index_queue[*variable_count] = index;                 \
-            ++(*variable_count);                                  \
-        }                                                         \
-        return variables + index;                                 \
+#define RETURN_VARIABLE(type, max_variables)             \
+    do                                                   \
+    {                                                    \
+        if (index >= max_variables)                      \
+        {                                                \
+            return nullptr;                              \
+        }                                                \
+        type *variables = type##_variables;              \
+        bool *allocations = type##_allocations;          \
+        int8_t *index_queue = type##_index_queue;        \
+        int8_t *variable_count = &type##_variable_count; \
+        if (!allocations[index])                         \
+        {                                                \
+            allocations[index] = true;                   \
+            index_queue[*variable_count] = index;        \
+            ++(*variable_count);                         \
+        }                                                \
+        return variables + index;                        \
     } while (0)
-
 
     /*
         \brief Gets the pointer of the float variable with the specified index in
             the shader context.
-    
+
         The maximum number of float variables that can be used in the shader_context
         is MAX_FLOAT_VARIABLES.
 
@@ -100,7 +108,8 @@ struct ShaderContext {
         \return Returns variable pointer if successful. Returns NULL if contex is a
                 null pointer or index is out of range.
     */
-    float* shader_context_float(int8_t index) {
+    float *shader_context_float(int8_t index)
+    {
         RETURN_VARIABLE(float, MAX_FLOAT_VARIABLES);
     }
 
@@ -115,7 +124,8 @@ struct ShaderContext {
         \return Returns variable pointer if successful. Returns NULL if contex is a
                 null pointer or index is out of range.
     */
-    vec2* shader_context_vec2(int8_t index) {
+    vec2 *shader_context_vec2(int8_t index)
+    {
         RETURN_VARIABLE(vec2, MAX_FLOAT_VARIABLES);
     }
 
@@ -130,7 +140,8 @@ struct ShaderContext {
         \return Returns variable pointer if successful. Returns NULL if contex is a
                 null pointer or index is out of range.
     */
-    vec3* shader_context_vec3(int8_t index) {
+    vec3 *shader_context_vec3(int8_t index)
+    {
         RETURN_VARIABLE(vec3, MAX_VECTOR3_VARIABLES);
     }
 
@@ -145,7 +156,8 @@ struct ShaderContext {
         \return Returns variable pointer if successful. Returns NULL if contex is a
                 null pointer or index is out of range.
     */
-    vec4* shader_context_vec4(int8_t index) {
+    vec4 *shader_context_vec4(int8_t index)
+    {
         RETURN_VARIABLE(vec4, MAX_VECTOR3_VARIABLES);
     }
 
