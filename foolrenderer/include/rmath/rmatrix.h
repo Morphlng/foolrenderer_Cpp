@@ -124,7 +124,7 @@ struct matrix
 		return matrix<3, 3>{
 			vec3{elements[0][0], elements[0][1], elements[0][2]},
 			vec3{elements[1][0], elements[1][1], elements[1][2]},
-			vec3{elements[2][0], elements[2][1], elements[2][2]}};
+			vec3{elements[2][0], elements[2][1], elements[2][2]}, false};
 	}
 
 	template <size_t U = row, std::enable_if_t<U == 4, bool> = true>
