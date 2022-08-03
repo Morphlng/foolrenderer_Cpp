@@ -137,10 +137,65 @@ static void render_model(const Model *model)
     }
 }
 
-int main()
+void render_cut_fish()
 {
-    auto base_path = std::string("D:\\Download\\foolrenderer-main\\assets\\cut_fish\\");
-    auto model_path = base_path + "cut_fish.obj";
+    auto const base_path = std::string("./assets/cut_fish/");
+    auto const model_path = base_path + "cut_fish.obj";
+    auto const base_color_map_path = base_path + "base_color.tga";
+    auto const normal_map_path = base_path + "normal.tga";
+    auto const metallic_map_path = base_path + "metallic.tga";
+    auto const roughness_map_path = base_path + "roughness.tga";
+
+    Model model;
+    model.mesh = std::make_unique<Mesh>(model_path);
+    model.base_color_map = load_image(base_color_map_path, true);
+    model.normal_map = load_image(normal_map_path, false);
+    model.metallic_map = load_image(metallic_map_path, false);
+    model.roughness_map = load_image(roughness_map_path, false);
+
+    initialize_rendering();
+    render_shadow_map(&model);
+
+    std::string frame_path = "./Render/";
+    int i = 1;
+    for (i; i <= 40; i++)
+    {
+        camera_position.z += 0.1f;
+
+        render_model(&model);
+        save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
+    }
+    std::cout << "z flip done\n";
+
+    for (i; i <= 80; i++)
+    {
+        camera_position.z -= 0.1f;
+        camera_position.x -= 0.1f;
+
+        render_model(&model);
+        save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
+    }
+    std::cout << "x flip done\n";
+
+    for (i; i <= 120; i++)
+    {
+        camera_position.x += 0.1f;
+        camera_position.y += 0.1f;
+
+        render_model(&model);
+        save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
+    }
+    std::cout << "y flip done\n";
+}
+
+void render_sphere(std::string base_path)
+{
+    if (base_path.back() != '/' || base_path.back() != '\\')
+    {
+        base_path.push_back('/');
+    }
+
+    auto const model_path = "./assets/sphere/sphere.obj";
     auto base_color_map_path = base_path + "base_color.tga";
     auto normal_map_path = base_path + "normal.tga";
     auto metallic_map_path = base_path + "metallic.tga";
@@ -156,9 +211,9 @@ int main()
     initialize_rendering();
     render_shadow_map(&model);
 
-    std::string frame_path = "D:/Records/Render/";
-    int i = 0;
-    for (i; i < 40; i++)
+    std::string frame_path = "./Render/";
+    int i = 1;
+    for (i; i <= 40; i++)
     {
         camera_position.z += 0.1f;
 
@@ -167,7 +222,7 @@ int main()
     }
     std::cout << "z flip done\n";
 
-    for (i; i < 80; i++)
+    for (i; i <= 80; i++)
     {
         camera_position.z -= 0.1f;
         camera_position.x -= 0.1f;
@@ -177,7 +232,7 @@ int main()
     }
     std::cout << "x flip done\n";
 
-    for (i; i < 120; i++)
+    for (i; i <= 120; i++)
     {
         camera_position.x += 0.1f;
         camera_position.y += 0.1f;
@@ -186,6 +241,11 @@ int main()
         save_image(color_buffer, frame_path + std::to_string(i) + ".tga", false);
     }
     std::cout << "y flip done\n";
+}
+
+int main()
+{
+    render_cut_fish();
 
     return 0;
 }
