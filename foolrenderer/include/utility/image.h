@@ -54,7 +54,7 @@ inline std::unique_ptr<Texture> load_image(std::string_view filename, bool is_sr
         return nullptr;
     }
 
-    tga::Image img(filename.data());
+    tga::Image img(filename);
 
     auto error_code = img.last_error();
     if (error_code != tga::tga_error::TGA_NO_ERROR)
@@ -186,7 +186,7 @@ inline bool save_image(const Texture &texture, std::string_view filename, bool a
     // For the same reason as inverting the image data vertically in the
     // load_image() function.
     img.flip_v();
-    img.save(filename.data());
+    img.save(filename);
 
     return true;
 }
@@ -260,7 +260,7 @@ inline bool save_image(const Texture *texture, std::string_view filename, bool a
     // For the same reason as inverting the image data vertically in the
     // load_image() function.
     img.flip_v();
-    img.save(filename.data());
+    img.save(filename);
 
     return true;
 }
