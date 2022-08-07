@@ -42,9 +42,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\utility\tgafunc.cpp">
-      <Filter>源文件\utility</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\rasterizer.cpp">
       <Filter>源文件\graphics</Filter>
     </ClCompile>
@@ -71,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="src\shaders\shadow_casting.cpp">
       <Filter>源文件\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\tgafunc_cpp.cpp">
+      <Filter>源文件\utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +101,6 @@
     <ClInclude Include="include\utility\image.h">
       <Filter>头文件\utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\utility\tgafunc.h">
-      <Filter>头文件\utility</Filter>
-    </ClInclude>
     <ClInclude Include="include\utility\mesh.h">
       <Filter>头文件\utility</Filter>
     </ClInclude>
@@ -118,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="include\shaders\shadow_casting.h">
       <Filter>头文件\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\tgafunc_cpp.h">
+      <Filter>头文件\utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

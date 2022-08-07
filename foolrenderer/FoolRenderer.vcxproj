@@ -29,7 +29,7 @@
     <ClCompile Include="src\shaders\standard.cpp" />
     <ClCompile Include="src\utility\fast_obj.cpp" />
     <ClCompile Include="src\utility\mesh.cpp" />
-    <ClCompile Include="src\utility\tgafunc.cpp" />
+    <ClCompile Include="src\utility\tgafunc_cpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\graphics\color.h" />
@@ -46,7 +46,7 @@
     <ClInclude Include="include\utility\fast_obj.h" />
     <ClInclude Include="include\utility\image.h" />
     <ClInclude Include="include\utility\mesh.h" />
-    <ClInclude Include="include\utility\tgafunc.h" />
+    <ClInclude Include="include\utility\tgafunc_cpp.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
